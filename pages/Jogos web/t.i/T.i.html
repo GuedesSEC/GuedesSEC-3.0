@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Programação - 100 Perguntas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        header {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #34495e;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .category-filter {
+            padding: 15px 20px;
+            background-color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: #2c3e50;
+        }
+        
+        .screen {
+            display: none;
+            padding: 30px;
+        }
+        
+        #start-screen {
+            display: block;
+            text-align: center;
+        }
+        
+        .welcome-message {
+            margin-bottom: 25px;
+        }
+        
+        .welcome-message h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            text-align: left;
+            margin: 20px 0;
+            padding: 0 20px;
+            columns: 2;
+            column-gap: 30px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 10px;
+            list-style-type: none;
+            padding-left: 30px;
+            position: relative;
+            break-inside: avoid;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #27ae60;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        button {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to right, #2980b9, #3498db);
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1.4;
+        }
+        
+        .category-label {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .selected {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .jump-to {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .jump-to input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        #result-screen {
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 2.2rem;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        
+        .score-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #3498db;
+            display: block;
+            margin: 15px 0;
+        }
+        
+        .feedback {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .good {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .medium {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .bad {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .timer {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-list {
+                columns: 1;
+            }
+            
+            .category-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .jump-to {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            .option {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-buttons {
+                justify-content: space-between;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Quiz de Programação - 100 Perguntas</h1>
+            <p>Teste seus conhecimentos em programação!</p>
+        </header>
+        
+        <div class="info-bar">
+            <div class="question-count">Pergunta: <span id="current-question">0</span>/100</div>
+            <div class="timer">Tempo: <span id="time">00:00</span></div>
+            <div class="score-count">Pontuação: <span id="current-score">0</span></div>
+        </div>
+        
+        <div class="category-filter">
+            <button class="category-btn active" data-category="all">Todas</button>
+            <button class="category-btn" data-category="html">HTML</button>
+            <button class="category-btn" data-category="css">CSS</button>
+            <button class="category-btn" data-category="javascript">JavaScript</button>
+            <button class="category-btn" data-category="python">Python</button>
+            <button class="category-btn" data-category="java">Java</button>
+            <button class="category-btn" data-category="sql">SQL</button>
+            <button class="category-btn" data-category="algoritmos">Algoritmos</button>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div id="start-screen" class="screen">
+            <div class="welcome-message">
+                <h2>Bem-vindo ao Quiz de Programação com 100 Perguntas!</h2>
+                <p>Este quiz contém 100 perguntas sobre diversos tópicos de programação.</p>
+                
+                <ul class="feature-list">
+                    <li>100 perguntas divididas em 8 categorias</li>
+                    <li>Filtro por categoria</li>
+                    <li>Navegação rápida entre perguntas</li>
+                    <li>Timer para acompanhar seu tempo</li>
+                    <li>Pontuação baseada nas respostas corretas</li>
+                    <li>Feedback personalizado ao final</li>
+                    <li>Design responsivo para mobile e desktop</li>
+                    <li>Barra de progresso visual</li>
+                    <li>Pule para qualquer pergunta</li>
+                    <li>Visualize suas respostas</li>
+                </ul>
+                
+                <p>Clique no botão abaixo para começar!</p>
+            </div>
+            <button id="start-btn">Iniciar Quiz</button>
+        </div>
+        
+        <div id="quiz-screen" class="screen">
+            <div class="category-label" id="category-label">HTML</div>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="navigation">
+                <div class="nav-buttons">
+                    <button id="prev-btn">Anterior</button>
+                    <button id="next-btn">Próxima</button>
+                </div>
+                <div class="jump-to">
+                    <span>Ir para:</span>
+                    <input type="number" id="jump-input" min="1" max="100" value="1">
+                    <button id="jump-btn">Ir</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="result-screen" class="screen">
+            <h2>Quiz Finalizado!</h2>
+            <div class="score">Sua pontuação: <span class="score-value" id="score-value">0</span></div>
+            <div class="feedback" id="feedback"></div>
+            <button id="restart-btn">Fazer Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Perguntas do quiz - 100 perguntas divididas por categoria
+        const questions = [
+            // HTML (15 perguntas)
+            {
+                question: "O que significa a sigla HTML?",
+                options: [
+                    "Hyperlinks and Text Markup Language",
+                    "Hyper Text Markup Language",
+                    "Home Tool Markup Language",
+                    "Hyper Transfer Markup Language"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual tag HTML é usada para criar um link?",
+                options: [
+                    "<link>",
+                    "<a>",
+                    "<href>",
+                    "<url>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual atributo HTML especifica um texto alternativo para uma imagem?",
+                options: [
+                    "alt",
+                    "src",
+                    "title",
+                    "href"
+                ],
+                correct: 0,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para o maior título?",
+                options: [
+                    "<h6>",
+                    "<heading>",
+                    "<h1>",
+                    "<head>"
+                ],
+                correct: 2,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML define o título do documento?",
+                options: [
+                    "<meta>",
+                    "<title>",
+                    "<head>",
+                    "<header>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para especificar um rodapé para um documento?",
+                options: [
+                    "<bottom>",
+                    "<footer>",
+                    "<section>",
+                    "<div>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual atributo é usado para definir estilos inline em HTML?",
+                options: [
+                    "class",
+                    "styles",
+                    "font",
+                    "style"
+                ],
+                correct: 3,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para exibir uma medida escalar?",
+                options: [
+                    "<gauge>",
+                    "<range>",
+                    "<meter>",
+                    "<measure>"
+                ],
+                correct: 2,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para agrupar itens relacionados em um formulário?",
+                options: [
+                    "<group>",
+                    "<fieldset>",
+                    "<div>",
+                    "<form-group>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para destacar texto importante?",
+                options: [
+                    "<important>",
+                    "<strong>",
+                    "<b>",
+                    "<em>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para incorporar vídeos?",
+                options: [
+                    "<media>",
+                    "<video>",
+                    "<movie>",
+                    "<embed>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para criar uma lista ordenada?",
+                options: [
+                    "<ul>",
+                    "<ol>",
+                    "<li>",
+                    "<list>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para criar uma lista não ordenada?",
+                options: [
+                    "<ul>",
+                    "<ol>",
+                    "<li>",
+                    "<list>"
+                ],
+                correct: 0,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para criar um campo de entrada de texto?",
+                options: [
+                    "<textfield>",
+                    "<input type='text'>",
+                    "<text>",
+                    "<input type='string'>"
+                ],
+                correct: 1,
+                category: "html"
+            },
+            {
+                question: "Qual elemento HTML é usado para criar um botão de opção?",
+                options: [
+                    "<checkbox>",
+                    "<option>",
+                    "<input type='radio'>",
+                    "<input type='select'>"
+                ],
+                correct: 2,
+                category: "html"
+            },
+            
+            // CSS (15 perguntas)
+            {
+                question: "O que CSS significa?",
+                options: [
+                    "Computer Style Sheets",
+                    "Creative Style System",
+                    "Cascading Style Sheets",
+                    "Colorful Style Sheets"
+                ],
+                correct: 2,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para alterar a cor do texto?",
+                options: [
+                    "text-color",
+                    "font-color",
+                    "color",
+                    "text-style"
+                ],
+                correct: 2,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para alterar a cor de fundo?",
+                options: [
+                    "bgcolor",
+                    "background-color",
+                    "color-background",
+                    "background"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Como você adiciona um comentário em CSS?",
+                options: [
+                    "// isto é um comentário //",
+                    "/* isto é um comentário */",
+                    "<!-- isto é um comentário -->",
+                    "' isto é um comentário"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para alterar a fonte do texto?",
+                options: [
+                    "font-style",
+                    "font-family",
+                    "text-style",
+                    "font-type"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS controla o tamanho do texto?",
+                options: [
+                    "text-size",
+                    "font-size",
+                    "text-style",
+                    "size"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Como você faz cada palavra em um texto começar com uma letra maiúscula?",
+                options: [
+                    "text-transform: capitalize",
+                    "text-style: capital",
+                    "transform: uppercase",
+                    "text-transform: uppercase"
+                ],
+                correct: 0,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade é usada para alterar a margem esquerda de um elemento?",
+                options: [
+                    "padding-left",
+                    "margin-left",
+                    "indent",
+                    "left-margin"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Como você seleciona um elemento com id 'header' em CSS?",
+                options: [
+                    ".header",
+                    "#header",
+                    "*header",
+                    "header"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            {
+                question: "Como você seleciona elementos com class name 'menu' em CSS?",
+                options: [
+                    ".menu",
+                    "#menu",
+                    "*menu",
+                    "menu"
+                ],
+                correct: 0,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para alterar o espaçamento entre linhas?",
+                options: [
+                    "line-height",
+                    "spacing",
+                    "line-spacing",
+                    "text-spacing"
+                ],
+                correct: 0,
+                category: "css"
+            },
+            {
+                question: "Qual valor da propriedade position faz um elemento ficar posicionado relativamente à sua posição normal?",
+                options: [
+                    "static",
+                    "absolute",
+                    "relative",
+                    "fixed"
+                ],
+                correct: 2,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para criar arredondamento de bordas?",
+                options: [
+                    "border-round",
+                    "corner-radius",
+                    "border-radius",
+                    "round-border"
+                ],
+                correct: 2,
+                category: "css"
+            },
+            {
+                question: "Qual propriedade CSS é usada para gerar espaço ao redor do conteúdo de um elemento?",
+                options: [
+                    "margin",
+                    "spacing",
+                    "padding",
+                    "content-space"
+                ],
+                correct: 2,
+                category: "css"
+            },
+            {
+                question: "Qual pseudo-classe é usada para selecionar um elemento quando o mouse passa sobre ele?",
+                options: [
+                    ":mouseover",
+                    ":hover",
+                    ":active",
+                    ":focus"
+                ],
+                correct: 1,
+                category: "css"
+            },
+            
+            // JavaScript (20 perguntas)
+            {
+                question: "Qual linguagem de programação é conhecida como a 'linguagem da web'?",
+                options: [
+                    "Python",
+                    "Java",
+                    "JavaScript",
+                    "C++"
+                ],
+                correct: 2,
+                category: "javascript"
+            },
+            {
+                question: "Como você cria uma função em JavaScript?",
+                options: [
+                    "function myFunction()",
+                    "function:myFunction()",
+                    "function = myFunction()",
+                    "def myFunction()"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Como você escreve 'Hello World' em um alertbox?",
+                options: [
+                    "alertBox('Hello World')",
+                    "msg('Hello World')",
+                    "alert('Hello World')",
+                    "message('Hello World')"
+                ],
+                correct: 2,
+                category: "javascript"
+            },
+            {
+                question: "Como você chama uma função chamada 'myFunction'?",
+                options: [
+                    "call myFunction()",
+                    "myFunction()",
+                    "call function myFunction",
+                    "execute myFunction()"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Como escrever um IF statement em JavaScript?",
+                options: [
+                    "if i == 5 then",
+                    "if (i == 5)",
+                    "if i = 5",
+                    "if i = 5 then"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Como escrever um IF statement para executar algum código se 'i' for diferente de 5?",
+                options: [
+                    "if (i != 5)",
+                    "if i <> 5",
+                    "if (i <> 5)",
+                    "if i =! 5 then"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Como um loop while começa?",
+                options: [
+                    "while (i <= 10)",
+                    "while i = 1 to 10",
+                    "while (i <= 10; i++)",
+                    "while i <= 10"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Como um loop for começa?",
+                options: [
+                    "for (i = 0; i <= 5)",
+                    "for (i = 0; i <= 5; i++)",
+                    "for i = 1 to 5",
+                    "for (i <= 5; i++)"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Qual é a maneira correta de escrever um array em JavaScript?",
+                options: [
+                    "var colors = (1:'red', 2:'green', 3:'blue')",
+                    "var colors = ['red', 'green', 'blue']",
+                    "var colors = 'red', 'green', 'blue'",
+                    "var colors = 1 = ('red'), 2 = ('green'), 3 = ('blue')"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Qual operador é usado para atribuir um valor a uma variável?",
+                options: [
+                    "*",
+                    "-",
+                    "=",
+                    "x"
+                ],
+                correct: 2,
+                category: "javascript"
+            },
+            {
+                question: "Qual statement é usado para sair de um loop?",
+                options: [
+                    "break",
+                    "exit",
+                    "stop",
+                    "quit"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Qual é a sintaxe correta para se referir a um script externo chamado 'script.js'?",
+                options: [
+                    "<script href='script.js'>",
+                    "<script name='script.js'>",
+                    "<script src='script.js'>",
+                    "<script file='script.js'>"
+                ],
+                correct: 2,
+                category: "javascript"
+            },
+            {
+                question: "Como você arredonda o número 7.25 para o inteiro mais próximo?",
+                options: [
+                    "Math.round(7.25)",
+                    "round(7.25)",
+                    "Math.rnd(7.25)",
+                    "rnd(7.25)"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Qual evento ocorre quando o usuário clica em um elemento HTML?",
+                options: [
+                    "onchange",
+                    "onclick",
+                    "onmouseclick",
+                    "onmouseover"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Como você declara uma variável JavaScript?",
+                options: [
+                    "variable carName;",
+                    "v carName;",
+                    "var carName;",
+                    "let carName;"
+                ],
+                correct: 2,
+                category: "javascript"
+            },
+            {
+                question: "Qual operador é usado para concatenar duas strings?",
+                options: [
+                    "&",
+                    "+",
+                    "*",
+                    "-"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Qual método pode ser usado para encontrar o maior valor de x e y?",
+                options: [
+                    "Math.ceil(x, y)",
+                    "Math.max(x, y)",
+                    "ceil(x, y)",
+                    "top(x, y)"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Qual palavra-chave é usada para criar um objeto em JavaScript?",
+                options: [
+                    "object",
+                    "new",
+                    "create",
+                    "make"
+                ],
+                correct: 1,
+                category: "javascript"
+            },
+            {
+                question: "Qual propriedade é usada para comprimento de um array?",
+                options: [
+                    "length",
+                    "size",
+                    "count",
+                    "max"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            {
+                question: "Qual método é usado para remover o último elemento de um array?",
+                options: [
+                    "pop()",
+                    "remove()",
+                    "delete()",
+                    "splice()"
+                ],
+                correct: 0,
+                category: "javascript"
+            },
+            
+            // Python (15 perguntas)
+            {
+                question: "Qual é a extensão de arquivo para arquivos Python?",
+                options: [
+                    ".py",
+                    ".pt",
+                    ".pyt",
+                    ".python"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Como você cria uma variável com valor numérico 5 em Python?",
+                options: [
+                    "x = int(5)",
+                    "int x = 5",
+                    "x = 5",
+                    "num x = 5"
+                ],
+                correct: 2,
+                category: "python"
+            },
+            {
+                question: "Qual método é usado para retornar o comprimento de uma string em Python?",
+                options: [
+                    "length()",
+                    "len()",
+                    "getLength()",
+                    "size()"
+                ],
+                correct: 1,
+                category: "python"
+            },
+            {
+                question: "Qual é a sintaxe correta para saída em Python?",
+                options: [
+                    "echo('Hello World')",
+                    "print('Hello World')",
+                    "console.log('Hello World')",
+                    "printf('Hello World')"
+                ],
+                correct: 1,
+                category: "python"
+            },
+            {
+                question: "Como você insere comentários em código Python?",
+                options: [
+                    "// Comentário",
+                    "/* Comentário */",
+                    "# Comentário",
+                    "<!-- Comentário -->"
+                ],
+                correct: 2,
+                category: "python"
+            },
+            {
+                question: "Qual coleção é ordenada e mutável em Python?",
+                options: [
+                    "Tuple",
+                    "List",
+                    "Set",
+                    "Dictionary"
+                ],
+                correct: 1,
+                category: "python"
+            },
+            {
+                question: "Como você começa a escrever uma declaração if em Python?",
+                options: [
+                    "if x > y:",
+                    "if (x > y)",
+                    "if x > y then",
+                    "if {x > y}"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual palavra-chave é usada para criar uma função em Python?",
+                options: [
+                    "function",
+                    "def",
+                    "func",
+                    "create"
+                ],
+                correct: 1,
+                category: "python"
+            },
+            {
+                question: "Qual método é usado para remover um elemento de uma lista em Python?",
+                options: [
+                    "remove()",
+                    "delete()",
+                    "pop()",
+                    "discard()"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual operador é usado para multiplicar números em Python?",
+                options: [
+                    "*",
+                    "#",
+                    "x",
+                    "%"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual é o operador de atribuição em Python?",
+                options: [
+                    "=",
+                    ":=",
+                    "->",
+                    "<-"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual função é usada para obter entrada do usuário em Python?",
+                options: [
+                    "input()",
+                    "get()",
+                    "read()",
+                    "scan()"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual método é usado para retornar uma cópia de uma string com letras maiúsculas?",
+                options: [
+                    "upper()",
+                    "uppercase()",
+                    "toUpper()",
+                    "capitalize()"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            {
+                question: "Qual destes NÃO é um tipo de dado numérico em Python?",
+                options: [
+                    "int",
+                    "float",
+                    "complex",
+                    "decimal"
+                ],
+                correct: 3,
+                category: "python"
+            },
+            {
+                question: "Qual método é usado para adicionar um elemento ao final de uma lista?",
+                options: [
+                    "append()",
+                    "add()",
+                    "insert()",
+                    "push()"
+                ],
+                correct: 0,
+                category: "python"
+            },
+            
+            // Java (10 perguntas)
+            {
+                question: "Qual é o principio do Java que permite que o mesmo método tenha comportamentos diferentes em classes diferentes?",
+                options: [
+                    "Herança",
+                    "Polimorfismo",
+                    "Encapsulamento",
+                    "Abstração"
+                ],
+                correct: 1,
+                category: "java"
+            },
+            {
+                question: "Qual palavra-chave é usada para criar um objeto em Java?",
+                options: [
+                    "create",
+                    "new",
+                    "object",
+                    "make"
+                ],
+                correct: 1,
+                category: "java"
+            },
+            {
+                question: "Qual método é o ponto de entrada de um programa Java?",
+                options: [
+                    "main()",
+                    "start()",
+                    "init()",
+                    "run()"
+                ],
+                correct: 0,
+                category: "java"
+            },
+            {
+                question: "Qual desses tipos de dados é primitivo em Java?",
+                options: [
+                    "String",
+                    "Integer",
+                    "boolean",
+                    "Array"
+                ],
+                correct: 2,
+                category: "java"
+            },
+            {
+                question: "Qual palavra-chave é usada para herança em Java?",
+                options: [
+                    "extends",
+                    "inherits",
+                    "implements",
+                    "super"
+                ],
+                correct: 0,
+                category: "java"
+            },
+            {
+                question: "Qual modificador de acesso torna um membro acessível apenas dentro de sua própria classe?",
+                options: [
+                    "public",
+                    "protected",
+                    "default",
+                    "private"
+                ],
+                correct: 3,
+                category: "java"
+            },
+            {
+                question: "Qual coleção Java não permite elementos duplicados?",
+                options: [
+                    "List",
+                    "Set",
+                    "Map",
+                    "Array"
+                ],
+                correct: 1,
+                category: "java"
+            },
+            {
+                question: "Qual interface é implementada por todas as classes em Java?",
+                options: [
+                    "Object",
+                    "Class",
+                    "Serializable",
+                    "Cloneable"
+                ],
+                correct: 0,
+                category: "java"
+            },
+            {
+                question: "Qual palavra-chave é usada para lançar uma exceção explicitamente?",
+                options: [
+                    "throw",
+                    "throws",
+                    "catch",
+                    "exception"
+                ],
+                correct: 0,
+                category: "java"
+            },
+            {
+                question: "Qual método é usado para comparar duas strings em Java?",
+                options: [
+                    "equals()",
+                    "compare()",
+                    "==",
+                    "isEqual()"
+                ],
+                correct: 0,
+                category: "java"
+            },
+            
+            // SQL (10 perguntas)
+            {
+                question: "O que SQL significa?",
+                options: [
+                    "Structured Query Language",
+                    "Simple Question Language",
+                    "Structured Question Language",
+                    "Simple Query Language"
+                ],
+                correct: 0,
+                category: "sql"
+            },
+            {
+                question: "Qual comando SQL é usado para extrair dados de um banco de dados?",
+                options: [
+                    "EXTRACT",
+                    "SELECT",
+                    "GET",
+                    "OPEN"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual comando SQL é usado para atualizar dados em um banco de dados?",
+                options: [
+                    "MODIFY",
+                    "UPDATE",
+                    "CHANGE",
+                    "ALTER"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual comando SQL é usado para deletar dados de um banco de dados?",
+                options: [
+                    "REMOVE",
+                    "DELETE",
+                    "COLLAPSE",
+                    "ERASE"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual comando SQL é usado para inserir novos dados em um banco de dados?",
+                options: [
+                    "ADD",
+                    "INSERT",
+                    "CREATE",
+                    "APPEND"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual cláusula SQL é usada para filtrar registros?",
+                options: [
+                    "FILTER",
+                    "WHERE",
+                    "HAVING",
+                    "CONDITION"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual palavra-chave SQL é usada para classificar o conjunto de resultados?",
+                options: [
+                    "SORT",
+                    "ORDER BY",
+                    "CLASSIFY",
+                    "ARRANGE"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual operador SQL é usado para buscar valores dentro de um intervalo específico?",
+                options: [
+                    "WITHIN",
+                    "BETWEEN",
+                    "RANGE",
+                    "INSIDE"
+                ],
+                correct: 1,
+                category: "sql"
+            },
+            {
+                question: "Qual função SQL é usada para contar o número de linhas?",
+                options: [
+                    "NUMBER()",
+                    "SUM()",
+                    "COUNT()",
+                    "TOTAL()"
+                ],
+                correct: 2,
+                category: "sql"
+            },
+            {
+                question: "Qual comando SQL é usado para criar uma tabela?",
+                options: [
+                    "CREATE TABLE",
+                    "CREATE DB",
+                    "BUILD TABLE",
+                    "CREATE DATABASE"
+                ],
+                correct: 0,
+                category: "sql"
+            },
+            
+            // Algoritmos (15 perguntas)
+            {
+                question: "O que é um algoritmo?",
+                options: [
+                    "Um tipo de estrutura de dados",
+                    "Um programa de computador",
+                    "Um conjunto de instruções passo a passo para resolver um problema",
+                    "Uma linguagem de programação"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual é a complexidade de tempo do algoritmo de busca binária?",
+                options: [
+                    "O(1)",
+                    "O(n)",
+                    "O(log n)",
+                    "O(n log n)"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual estrutura de dados segue o princípio FIFO (First-In-First-Out)?",
+                options: [
+                    "Pilha",
+                    "Fila",
+                    "Lista Ligada",
+                    "Árvore"
+                ],
+                correct: 1,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual estrutura de dados segue o princípio LIFO (Last-In-First-Out)?",
+                options: [
+                    "Pilha",
+                    "Fila",
+                    "Lista Ligada",
+                    "Árvore"
+                ],
+                correct: 0,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo de ordenação tem complexidade O(n²) no pior caso?",
+                options: [
+                    "QuickSort",
+                    "MergeSort",
+                    "BubbleSort",
+                    "HeapSort"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo usa a estratégia 'dividir para conquistar'?",
+                options: [
+                    "Bubble Sort",
+                    "Insertion Sort",
+                    "Merge Sort",
+                    "Selection Sort"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual é a complexidade de tempo do pior caso do QuickSort?",
+                options: [
+                    "O(n)",
+                    "O(n log n)",
+                    "O(n²)",
+                    "O(log n)"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual estrutura de dados é melhor para implementar uma fila de prioridade?",
+                options: [
+                    "Array",
+                    "Lista Ligada",
+                    "Heap",
+                    "Pilha"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo é usado para encontrar o caminho mais curto em um grafo com pesos não negativos?",
+                options: [
+                    "Dijkstra",
+                    "Bellman-Ford",
+                    "Floyd-Warshall",
+                    "Kruskal"
+                ],
+                correct: 0,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo é usado para encontrar a árvore geradora mínima?",
+                options: [
+                    "Dijkstra",
+                    "Prim",
+                    "Bellman-Ford",
+                    "Depth-First Search"
+                ],
+                correct: 1,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual notação é usada para descrever a complexidade de tempo de um algoritmo?",
+                options: [
+                    "Notação Big O",
+                    "Notação Little o",
+                    "Notação Theta",
+                    "Notação Omega"
+                ],
+                correct: 0,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo de ordenação tem complexidade O(n log n) no pior caso?",
+                options: [
+                    "QuickSort",
+                    "BubbleSort",
+                    "InsertionSort",
+                    "MergeSort"
+                ],
+                correct: 3,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual estrutura de dados permite acesso rápido aos elementos usando chaves?",
+                options: [
+                    "Array",
+                    "Lista Ligada",
+                    "Dicionário/HashMap",
+                    "Pilha"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual algoritmo é usado para procurar um elemento em uma lista ordenada?",
+                options: [
+                    "Busca Linear",
+                    "Busca Binária",
+                    "Busca por Interpolação",
+                    "Busca em Profundidade"
+                ],
+                correct: 1,
+                category: "algoritmos"
+            },
+            {
+                question: "Qual é a complexidade de tempo da busca linear?",
+                options: [
+                    "O(1)",
+                    "O(log n)",
+                    "O(n)",
+                    "O(n²)"
+                ],
+                correct: 2,
+                category: "algoritmos"
+            }
+        ];
+
+        // Elementos do DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const jumpBtn = document.getElementById('jump-btn');
+        const jumpInput = document.getElementById('jump-input');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const progressElement = document.getElementById('progress');
+        const scoreValueElement = document.getElementById('score-value');
+        const feedbackElement = document.getElementById('feedback');
+        const currentQuestionElement = document.getElementById('current-question');
+        const currentScoreElement = document.getElementById('current-score');
+        const timeElement = document.getElementById('time');
+        const categoryLabel = document.getElementById('category-label');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+
+        // Variáveis do quiz
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let score = 0;
+        let timerInterval;
+        let timeSeconds = 0;
+        let currentCategory = 'all';
+        let filteredQuestions = questions;
+
+        // Iniciar o quiz
+        startBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', restartQuiz);
+        jumpBtn.addEventListener('click', jumpToQuestion);
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => filterQuestions(btn.dataset.category, btn));
+        });
+
+        function startQuiz() {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+            score = 0;
+            timeSeconds = 0;
+            
+            // Iniciar temporizador
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer();
+            
+            updateScore();
+            showQuestion(currentQuestionIndex);
+        }
+
+        function updateTimer() {
+            timeSeconds++;
+            const minutes = Math.floor(timeSeconds / 60);
+            const seconds = timeSeconds % 60;
+            timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function filterQuestions(category, button) {
+            currentCategory = category;
+            
+            // Atualizar botões ativos
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            if (category === 'all') {
+                filteredQuestions = questions;
+            } else {
+                filteredQuestions = questions.filter(q => q.category === category);
+            }
+            
+            // Reiniciar o quiz com as perguntas filtradas
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+            score = 0;
+            updateScore();
+            showQuestion(currentQuestionIndex);
+        }
+
+        function showQuestion(index) {
+            if (filteredQuestions.length === 0) return;
+            
+            const question = filteredQuestions[index];
+            questionElement.textContent = question.question;
+            categoryLabel.textContent = question.category.toUpperCase();
+            currentQuestionElement.textContent = `${index + 1}/${filteredQuestions.length}`;
+            
+            // Limpar opções anteriores
+            optionsElement.innerHTML = '';
+            
+            // Adicionar novas opções
+            question.options.forEach((option, i) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                if (userAnswers[index] === i) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(i));
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // Atualizar navegação
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === filteredQuestions.length - 1 ? 'Finalizar' : 'Próxima';
+            
+            // Atualizar barra de progresso
+            progressElement.style.width = `${((index + 1) / filteredQuestions.length) * 100}%`;
+            
+            // Atualizar campo de pular para
+            jumpInput.value = index + 1;
+            jumpInput.max = filteredQuestions.length;
+        }
+
+        function selectOption(optionIndex) {
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // Verificar se a resposta está correta e atualizar a pontuação
+            if (optionIndex === filteredQuestions[currentQuestionIndex].correct) {
+                score++;
+                updateScore();
+            } else if (userAnswers[currentQuestionIndex] !== null && 
+                      optionIndex !== filteredQuestions[currentQuestionIndex].correct) {
+                // Se havia uma resposta anterior correta e agora está errada, diminui a pontuação
+                score--;
+                updateScore();
+            }
+            
+            // Atualizar visualmente a seleção
+            const options = optionsElement.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                if (i === optionIndex) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateScore() {
+            currentScoreElement.textContent = score;
+        }
+
+        function jumpToQuestion() {
+            let questionNum = parseInt(jumpInput.value);
+            if (isNaN(questionNum) || questionNum < 1) questionNum = 1;
+            if (questionNum > filteredQuestions.length) questionNum = filteredQuestions.length;
+            
+            currentQuestionIndex = questionNum - 1;
+            showQuestion(currentQuestionIndex);
+        }
+
+        // Navegação entre perguntas
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < filteredQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            } else {
+                finishQuiz();
+            }
+        });
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            
+            // Mostrar resultados
+            quizScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            scoreValueElement.textContent = `${score} / ${filteredQuestions.length}`;
+            
+            // Dar feedback baseado na pontuação
+            const percentage = (score / filteredQuestions.length) * 100;
+            if (percentage >= 80) {
+                feedbackElement.textContent = 'Excelente! Você é um expert em programação!';
+                feedbackElement.className = 'feedback good';
+            } else if (percentage >= 50) {
+                feedbackElement.textContent = 'Bom trabalho! Seu conhecimento em programação é sólido, mas há espaço para melhorar.';
+                feedbackElement.className = 'feedback medium';
+            } else {
+                feedbackElement.textContent = 'Continue estudando! A programação exige prática constante.';
+                feedbackElement.className = 'feedback bad';
+            }
+        }
+
+        function restartQuiz() {
+            resultScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
