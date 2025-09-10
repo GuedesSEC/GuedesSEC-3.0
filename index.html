@@ -435,10 +435,16 @@
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 32px;">
-                <ul style="display: flex; gap: 24px; list-style: none; padding: 0; margin: 0;">
-                    <li><a href="#">Privacidade</a></li>
-                    <li><a href="#">Termos de Uso</a></li>
-                    <li><a href="#">Suporte</a></li>
+                <ul style="display: flex; gap: 24px; list-style: none; padding: 0; margin: 0; font-family: 'Courier New', monospace; color: #00ff00;">
+                    <li>
+                        <a href="#" onclick="openModal('privacyModal')" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #00ff00; transition: 0.2s;">Privacidade</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="openModal('termsModal')" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #00ff00; transition: 0.2s;">Termos de Uso</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="openModal('supportModal')" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #00ff00; transition: 0.2s;">Suporte</a>
+                    </li>
                 </ul>
                 <a href="pages/Loja da GuedesSEC/" class="btn" target="_blank" style="display:inline-block; background:#43a047; color:#fff; font-weight:bold; padding:14px 36px; border-radius:12px; font-size:1.1em; box-shadow:0 4px 16px rgba(0,0,0,0.12); text-decoration:none; margin-left:24px;">
                     <i class="fas fa-store" style="font-size:1.3em; vertical-align:middle; margin-right:10px;"></i>
@@ -448,122 +454,49 @@
         </div>
     </footer>
 
+    <!-- MODAIS BONITOS -->
+    <div id="privacyModal" class="modal-overlay">
+        <div class="modal-card" style="background:#181818; color:#00ff00; font-family:monospace;">
+            <button class="modal-close" onclick="closeModal('privacyModal')" style="color:#00ff00;">&times;</button>
+            <h2 style="color:#00ff00;">Política de Privacidade</h2>
+            <p>
+                Seus dados são criptografados e protegidos.<br>
+                Nenhuma informação sensível será compartilhada.<br>
+                <span style="color:#fff;">A GuedesSEC respeita sua privacidade!</span>
+            </p>
+        </div>
+    </div>
+    <div id="termsModal" class="modal-overlay">
+        <div class="modal-card" style="background:#181818; color:#00ff00; font-family:monospace;">
+            <button class="modal-close" onclick="closeModal('termsModal')" style="color:#00ff00;">&times;</button>
+            <h2 style="color:#00ff00;">Termos de Uso</h2>
+            <p>
+                Ao acessar este site, você concorda com nossos termos.<br>
+                Use com responsabilidade e ética.<br>
+                <span style="color:#fff;">Bem-vindo ao universo GuedesSEC!</span>
+            </p>
+        </div>
+    </div>
+    <div id="supportModal" class="modal-overlay">
+        <div class="modal-card" style="background:#181818; color:#00ff00; font-family:monospace;">
+            <button class="modal-close" onclick="closeModal('supportModal')" style="color:#00ff00;">&times;</button>
+            <h2 style="color:#00ff00;">Suporte</h2>
+            <p>
+                Precisa de ajuda?<br>
+                <a href="mailto:mateusjoao79509@gmail.com" target="_blank" style="color:#fff; text-decoration:underline;">
+                    Clique aqui para enviar um e-mail para o suporte
+                </a><br>
+                <span style="color:#fff;">Equipe GuedesSEC pronta para te atender!</span>
+            </p>
+        </div>
+    </div>
+
     <script>
-        // Funções para abrir e fechar modais
         function openModal(id) {
             document.getElementById(id).classList.add('active');
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
-            if(id === 'modalLivros') voltarLivros();
-            if(id === 'modalIsos') mostrarCategorias();
-            if(id === 'modalJogos') voltarJogos();
-            if(id === 'modalFilmes') voltarFilmes();
-        }
-
-        // JavaScript - Livros por categoria
-        const livros = {
-            programacao: [
-                { nome: "CÓDIGO LIMPO", link: "Livros/Programação/codigo-limpo-completo-pt_text.pdf" },
-                { nome: "ENTENDENDO ALGORITMOS", link: "Livros/Programação/Entendendo-Algoritmos-Um-Guia-Ilustrado-Para-Programadores-e-Outros-Curiosos-Autor-_Aditya-Y.pdf" },
-            ],
-            romance: [
-                { nome: "A Hipótese do Amor", link: "Livros/A-Hipotese-do-Amor-Ali-Hazelwood.pdf" }
-            ],
-            tecnologia: [
-                { nome: "O Homem Mais Rico da Babilônia", link: "Livros/O-Homem-Mais-Rico-da-Babilônia.pdf" }
-            ]
-        };
-        
-        function showLivros(categoria) {
-            document.getElementById('livros-categorias').style.display = 'none';
-            document.getElementById('voltarLivros').style.display = 'inline-block';
-            const lista = document.getElementById('livros-arquivos');
-            lista.innerHTML = '';
-            livros[categoria].forEach(livro => {
-                lista.innerHTML += `<li><i class="fas fa-book"></i> <a href="${livro.link}" target="_blank">${livro.nome}</a></li>`;
-            });
-            lista.style.display = 'block';
-        }
-        function voltarLivros() {
-            document.getElementById('livros-categorias').style.display = 'block';
-            document.getElementById('livros-arquivos').style.display = 'none';
-            document.getElementById('voltarLivros').style.display = 'none';
-        }
-
-        // ISOs por categoria
-        const isos = {
-            linux: [
-                { nome: "Linux MIT 64bits", link: "os/Sistemas/linuxMit64bits.iso" }
-            ],
-            windows: [
-                { nome: "Windows 10", link: "Isos/Sistemas/windows10.iso" }
-            ]
-        };
-        function showIsos(categoria) {
-            document.getElementById('isos-categorias').style.display = 'none';
-            document.getElementById('voltarIsos').style.display = 'inline-block';
-            const lista = document.getElementById('isos-arquivos');
-            lista.innerHTML = '';
-            isos[categoria].forEach(iso => {
-                lista.innerHTML += `<li><i class="fas fa-compact-disc"></i> <a href="${iso.link}" target="_blank">${iso.nome}</a></li>`;
-            });
-            lista.style.display = 'block';
-        }
-        function voltarIsos() {
-            document.getElementById('isos-categorias').style.display = 'block';
-            document.getElementById('isos-arquivos').style.display = 'none';
-            document.getElementById('voltarIsos').style.display = 'none';
-        }
-        
-        // Jogos por categoria
-        const jogos = {
-            acao: [
-                { nome: "#", link: "cole seu link aqui" }
-            ],
-            aventura: [
-                { nome: "#", link: "cole seu link aqui" }
-            ]
-        };
-        function showJogos(categoria) {
-            document.getElementById('jogos-categorias').style.display = 'none';
-            document.getElementById('voltarJogos').style.display = 'inline-block';
-            const lista = document.getElementById('jogos-arquivos');
-            lista.innerHTML = '';
-            jogos[categoria].forEach(jogo => {
-                lista.innerHTML += `<li><i class="fas fa-gamepad"></i> <a href="${jogo.link}" target="_blank">${jogo.nome}</a></li>`;
-            });
-            lista.style.display = 'block';
-        }
-        function voltarJogos() {
-            document.getElementById('jogos-categorias').style.display = 'block';
-            document.getElementById('jogos-arquivos').style.display = 'none';
-            document.getElementById('voltarJogos').style.display = 'none';
-        }
-
-        // Filmes por categoria
-        const filmes = {
-            terror: [
-                { nome: "Karate kid 2010", link: "https://drive.google.com/file/d/1wXd9XhZAzxxFzPCTjAQPpvOIhQ-hFXD1/view?usp=drive_link" }
-            ],
-            drama: [
-                { nome: "Jumper", link: "https://drive.google.com/file/d/1FX2U7wbHgdlxnRftSlD92FSkWFdAlOvI/view?usp=drive_link" }
-            ]
-        };
-        function showFilmes(categoria) {
-            document.getElementById('filmes-categorias').style.display = 'none';
-            document.getElementById('voltarFilmes').style.display = 'inline-block';
-            const lista = document.getElementById('filmes-arquivos');
-            lista.innerHTML = '';
-            filmes[categoria].forEach(filme => {
-                lista.innerHTML += `<li><i class="fas fa-film"></i> <a href="${filme.link}" target="_blank">${filme.nome}</a></li>`;
-            });
-            lista.style.display = 'block';
-        }
-        function voltarFilmes() {
-            document.getElementById('filmes-categorias').style.display = 'block';
-            document.getElementById('filmes-arquivos').style.display = 'none';
-            document.getElementById('voltarFilmes').style.display = 'none';
         }
     </script>
     <script src="script.js"></script>
